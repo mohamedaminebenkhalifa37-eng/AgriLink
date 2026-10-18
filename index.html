@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="AgriPlace, la marketplace pour acheter et vendre du matériel et des produits agricoles." />
+  <title>AgriLink — La marketplace agricole</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="#" aria-label="AgriLink, accueil">
+          <span class="brand-mark"><svg>
+              <use href="#icon-leaf"></use>
+            </svg></span>
+          <span>Agri<span>Place</span></span>
+        </a>
+        <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
+          <a href="Acheter.html">Acheter</a>
+          <a href="Catégories.html">Catégories</a>
+          <a href="#fonctionnement">Comment ça marche</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="text-button hide-mobile" id="login-button" type="button">
+            <a class="text-button hide-mobile" id="login-button" href="se_connecter.html">
+              <svg>
+                <use href="#icon-user"></use>
+              </svg>
+              Se connecter
+            </a>
+          </button>
+          <button class="primary-button compact open-sell" type="button">Déposer une annonce</button>
+          <button class="menu-button" id="menu-button" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+            <svg>
+              <use href="#icon-menu"></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenu">
+      <section class="hero">
+        <div class="hero-grain"></div>
+        <div class="container hero-layout">
+          <div class="hero-content">
+            <div class="eyebrow light"><span><svg>
+                  <use href="#icon-sparkles"></use>
+                </svg></span> La marketplace du monde agricole</div>
+            <h1>Tout pour cultiver<br />vos <em>projets.</em></h1>
+            <p>Achetez et vendez du matériel, des produits et des récoltes en toute confiance, entre professionnels de
+              l’agriculture.</p>
+            <form class="search-panel" id="search-form">
+              <label class="search-field">
+                <svg>
+                  <use href="#icon-search"></use>
+                </svg>
+                <input id="search-input" type="search" placeholder="Que recherchez-vous ?" aria-label="Recherche" />
+              </label>
+              <label class="select-field">
+                <select id="category-select" aria-label="Catégorie">
+                  <option value="Toutes les catégories">Toutes les catégories</option>
+                  <option value="Matériel agricole">Matériel agricole</option>
+                  <option value="Véhicules">Véhicules</option>
+                  <option value="Récoltes &amp; produits">Récoltes &amp; produits</option>
+                  <option value="Semences">Semences &amp; plants</option>
+                  <option value="Intrants">Intrants agricoles</option>
+                  <option value="Pièces">Pièces détachées</option>
+                </select>
+                <span><svg>
+                    <use href="#icon-chevron"></use>
+                  </svg></span>
+              </label>
+              <button class="search-button" type="submit">Rechercher <svg>
+                  <use href="#icon-arrow"></use>
+                </svg></button>
+            </form>
+            <div class="trust-row">
+              <span><svg>
+                  <use href="#icon-shield"></use>
+                </svg> Vendeurs vérifiés</span>
+              <span><svg>
+                  <use href="#icon-check"></use>
+                </svg> Annonces contrôlées</span>
+              <span><svg>
+                  <use href="#icon-location"></use>
+                </svg> Partout en France</span>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-image-wrap">
+              <img src="https://images.unsplash.com/photo-1706862609885-7771b001daa2?auto=format&fit=crop&w=1400&q=90"
+                alt="Tracteur travaillant dans un champ au coucher du soleil" />
+            </div>
+            <div class="floating-card floating-top">
+              <span class="float-icon"><svg>
+                  <use href="#icon-tractor"></use>
+                </svg></span>
+              <div><strong>+ 4 800</strong><small>annonces actives</small></div>
+            </div>
+            <div class="floating-card floating-bottom">
+              <span class="avatar-stack"><i>JD</i><i>MF</i><i>+</i></span>
+              <div><strong>12 000+</strong><small>agriculteurs inscrits</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="how section" id="fonctionnement">
+        <div class="container how-layout">
+          <div class="how-image">
+            <img src="https://images.unsplash.com/photo-1655048406853-b852e43a14e6?auto=format&fit=crop&w=1200&q=88"
+              alt="Agriculteur conduisant son tracteur dans un champ" />
+            <div class="quality-badge"><svg>
+                <use href="#icon-shield"></use>
+              </svg>
+              <div><strong>100% sécurisé</strong><small>Chaque profil est vérifié</small></div>
+            </div>
+          </div>
+          <div class="how-content">
+            <span class="kicker">Simple, rapide, humain</span>
+            <h2>Votre prochain achat<br />en <em>trois étapes.</em></h2>
+            <p class="lead">AgriPlace simplifie les échanges entre agriculteurs, sans intermédiaire inutile.</p>
+            <div class="steps">
+              <div class="step"><span>01</span>
+                <div>
+                  <h3>Trouvez votre produit</h3>
+                  <p>Parcourez des milliers d’annonces et affinez votre recherche selon vos besoins.</p>
+                </div>
+              </div>
+              <div class="step"><span>02</span>
+                <div>
+                  <h3>Échangez en confiance</h3>
+                  <p>Discutez directement avec des vendeurs vérifiés près de chez vous.</p>
+                </div>
+              </div>
+              <div class="step"><span>03</span>
+                <div>
+                  <h3>Concluez simplement</h3>
+                  <p>Organisez le paiement, la livraison ou la remise en main propre.</p>
+                </div>
+              </div>
+            </div>
+            <a class="primary-button" href="#annonces">Commencer maintenant <svg>
+                <use href="#icon-arrow"></use>
+              </svg></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sell-banner">
+        <div class="container sell-inner">
+          <div><span class="eyebrow light"><svg>
+                <use href="#icon-leaf"></use>
+              </svg> Simple et sans frais</span>
+            <h2>Une machine inutilisée ?<br /><em>Donnez-lui une seconde vie.</em></h2>
+          </div>
+          <div class="sell-action">
+            <p>Publiez votre annonce en quelques minutes et touchez des milliers d’agriculteurs.</p><button
+              class="cream-button open-sell" type="button">Déposer une annonce <svg>
+                <use href="#icon-arrow"></use>
+              </svg></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-brand"><a class="brand inverted" href="#"><span class="brand-mark"><svg>
+                <use href="#icon-leaf"></use>
+              </svg></span><span>Agri<span>Place</span></span></a>
+          <p>La marketplace qui fait pousser vos projets agricoles.</p>
+        </div>
+        <div><strong>Marketplace</strong><a href="#annonces">Acheter</a><button class="open-sell"
+            type="button">Vendre</button><a href="#categories">Catégories</a></div>
+        <div><strong>À propos</strong><a href="#fonctionnement">Comment ça marche</a><a href="#">Notre mission</a><a
+            href="#">Conseils &amp; actualités</a></div>
+        <div><strong>Besoin d’aide ?</strong><a href="#">Centre d’aide</a><a href="#">Nous contacter</a><a
+            href="#">Sécurité</a></div>
+      </div>
+      <div class="container footer-bottom"><span>© 2025 AgriPlace. Tous droits réservés.</span><span><a
+            href="#">Mentions légales</a><a href="#">Confidentialité</a></span></div>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="sell-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sell-title">
+      <button class="modal-close" id="modal-close" type="button" aria-label="Fermer"><svg>
+          <use href="#icon-x"></use>
+        </svg></button>
+      <div id="form-view">
+        <span class="modal-icon"><svg>
+            <use href="#icon-package"></use>
+          </svg></span>
+        <span class="kicker">Nouvelle annonce</span>
+        <h2 id="sell-title">Que souhaitez-vous vendre ?</h2>
+        <p>Renseignez les informations essentielles. Vous pourrez ajouter plus de détails ensuite.</p>
+        <form class="listing-form" id="listing-form">
+          <label>Titre de l’annonce<input name="title" required minlength="4" maxlength="150"
+              placeholder="Ex. Tracteur Renault 95-14" /></label>
+          <div class="form-row">
+            <label>Catégorie<select name="category" required>
+                <option value="" disabled selected>Choisir</option>
+                <option value="Matériel agricole">Matériel agricole</option>
+                <option value="Véhicules">Véhicules</option>
+                <option value="Récoltes &amp; produits">Récoltes &amp; produits</option>
+                <option value="Semences">Semences &amp; plants</option>
+                <option value="Intrants">Intrants agricoles</option>
+                <option value="Pièces">Pièces détachées</option>
+              </select></label>
+            <label>Prix souhaité<input name="price" required min="0" max="10000000" step="any" type="number"
+                placeholder="0 €" /></label>
+          </div>
+          <label>Localisation<input name="location" required maxlength="120"
+              placeholder="Ville ou code postal" /></label>
+          <label>Description<textarea name="description" rows="3"
+              placeholder="Décrivez l’état, l’année et les caractéristiques"></textarea></label>
+          <button class="primary-button full" type="submit">Publier l’annonce <svg>
+              <use href="#icon-arrow"></use>
+            </svg></button>
+          <p class="form-message" id="form-message" role="status"></p>
+        </form>
+      </div>
+      <div class="success-state" id="success-view" hidden>
+        <span><svg>
+            <use href="#icon-check"></use>
+          </svg></span>
+        <h2>Votre annonce est prête !</h2>
+        <p id="success-text">Votre annonce a bien été publiée. Vous pouvez la retrouver dans la liste.</p>
+        <button class="primary-button full" id="finish-button" type="button">Terminer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </symbol>
+    <symbol id="icon-cart" viewBox="0 0 24 24">
+      <circle cx="9" cy="20" r="1" />
+      <circle cx="19" cy="20" r="1" />
+      <path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h8.9a2 2 0 002-1.6L22 8H6" />
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="M5 12l4 4L19 6" />
+    </symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24">
+      <path d="M9 18l6-6-6-6" />
+    </symbol>
+    <symbol id="icon-heart" viewBox="0 0 24 24">
+      <path
+        d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 00-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 00-.1-7.8z" />
+    </symbol>
+    <symbol id="icon-leaf" viewBox="0 0 24 24">
+      <path
+        d="M11 20A7 7 0 019.8 6.1C15.5 5 18 2 18 2c1 5.5-1 11-6 13M2 21c0-3 1.85-5.36 5.08-6.94C9.31 13 12 12 16 12" />
+    </symbol>
+    <symbol id="icon-location" viewBox="0 0 24 24">
+      <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1116 0z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </symbol>
+    <symbol id="icon-package" viewBox="0 0 24 24">
+      <path
+        d="M16.5 9.4l-9-5.2M21 16V8a2 2 0 00-1-1.7l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.7l7 4a2 2 0 002 0l7-4a2 2 0 001-1.7zM3.3 7l8.7 5 8.7-5M12 22V12" />
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-4-4" />
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+      <path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3v8zM9 12l2 2 4-4" />
+    </symbol>
+    <symbol id="icon-sparkles" viewBox="0 0 24 24">
+      <path
+        d="M12 3l-1.3 3.7L7 8l3.7 1.3L12 13l1.3-3.7L17 8l-3.7-1.3L12 3zM5 14l-.8 2.2L2 17l2.2.8L5 20l.8-2.2L8 17l-2.2-.8L5 14z" />
+    </symbol>
+    <symbol id="icon-tractor" viewBox="0 0 24 24">
+      <path d="M3 4h9v9M5 13V9h7l4 4M16 8h3l2 5" />
+      <circle cx="7" cy="17" r="4" />
+      <circle cx="18" cy="17" r="3" />
+      <path d="M11 17h4" />
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0116 0" />
+    </symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </symbol>
+  </svg>
+  <script src="assets/js/app.js" defer></script>
+</body>
+
+</html>

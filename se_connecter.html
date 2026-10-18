@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - AgriPlace</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #062d1c, #0d472d);
+      color: white;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 35px;
+      background: #ffffff;
+      color: #183b2b;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .logo span {
+      color: #b9e64b;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #718078;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      color: #718078;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #dce5df;
+      border-radius: 9px;
+      outline: none;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #2b704b;
+      box-shadow: 0 0 0 3px rgba(43, 112, 75, 0.12);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .remember input {
+      width: auto;
+      accent-color: #17452e;
+    }
+
+    a {
+      color: #28734b;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: #17452e;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-button:hover {
+      background: #246541;
+      transform: translateY(-1px);
+    }
+
+    .register {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+      color: #718078;
+    }
+
+    .back-home {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #718078;
+      font-size: 13px;
+    }
+
+    .message {
+      display: none;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background: #edf7e8;
+      color: #17452e;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="logo">Agri<span>Link</span></div>
+    <p class="subtitle">La marketplace du monde agricole</p>
+
+    <h2>Bon retour !</h2>
+    <p class="description">
+      Connectez-vous pour accéder à votre compte.
+    </p>
+
+    <div class="message" id="message"></div>
+
+    <form id="loginForm">
+
+      <div class="form-group">
+        <label for="email">Adresse e-mail</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="exemple@email.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Votre mot de passe"
+          required
+        >
+      </div>
+
+      <div class="options">
+        <label class="remember">
+          <input type="checkbox" id="remember">
+          Se souvenir de moi
+        </label>
+
+        <a href="#" id="forgotPassword">Mot de passe oublié ?</a>
+      </div>
+
+      <button type="submit" class="login-button">
+        Se connecter →
+      </button>
+
+    </form>
+
+    <div class="register">
+      Vous n'avez pas de compte ?
+      <a href="register.html">Créer un compte</a>
+    </div>
+
+    <a href="index.html" class="back-home">
+      ← Retour à l'accueil
+    </a>
+
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      message.style.display = "block";
+
+      // Démonstration uniquement : aucune authentification réelle.
+      if (email && password) {
+        message.textContent =
+          "Formulaire valide ! Connectez maintenant votre backend.";
+      }
+    });
+
+    document.getElementById("forgotPassword")
+      .addEventListener("click", function(event) {
+        event.preventDefault();
+        alert("Veuillez connecter cette fonction à votre système de réinitialisation.");
+      });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acheter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap"
+        rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+    <section class="listings section" id="annonces">
+        <div class="container">
+            <div class="section-heading align-end">
+                <div><span class="kicker">Les dernières opportunités</span>
+                    <h2>Fraîchement arrivé<br />sur <em>AgriLink.</em></h2>
+                </div>
+                <div class="listing-meta"><button type="button" class="filter-pill" id="filter-pill"
+                        hidden></button><span id="listing-count">4 annonces</span></div>
+            </div>
+            <div class="product-grid" id="product-grid" aria-live="polite"></div>
+            <div class="empty-state" id="empty-state" hidden>
+                <span><svg>
+                        <use href="#icon-search"></use>
+                    </svg></span>
+                <h3>Aucune annonce trouvée</h3>
+                <p>Essayez un autre mot-clé ou explorez toutes nos annonces.</p>
+                <button class="secondary-button" id="reset-search" type="button">Tout afficher</button>
+            </div>
+            <div class="product-grid" id="product-grid" aria-live="polite">
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1614977645540-7abd88ba8e56?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Tracteur John Deere 5075E" loading="lazy"><span class="product-type">Matériel
+                            agricole</span><button class="favorite" data-favorite="1" type="button" aria-pressed="false"
+                            aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">2019 · 1 250 h</span>
+                        <h3>Tracteur John Deere 5075E</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Orléans, Loiret</div>
+                        <div class="product-footer">
+                            <div><strong>32 500&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Ferme des Vallons"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1606739211185-2c846d734a6d?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Tracteur Massey Ferguson 5711" loading="lazy"><span
+                            class="product-type">Véhicules</span><button class="favorite" data-favorite="2"
+                            type="button" aria-pressed="false" aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">2021 · 890 h</span>
+                        <h3>Tracteur Massey Ferguson 5711</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Auch, Gers</div>
+                        <div class="product-footer">
+                            <div><strong>44 900&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="EARL du Soleil"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Pommes de terre — lot 2 tonnes" loading="lazy"><span class="product-type">Récoltes
+                            &amp; produits</span><button class="favorite" data-favorite="3" type="button"
+                            aria-pressed="false" aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">Récolte 2025 · Bio</span>
+                        <h3>Pommes de terre — lot 2 tonnes</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Arras, Pas-de-Calais</div>
+                        <div class="product-footer">
+                            <div><strong>680&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Maraîchers du Nord"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1696441567908-6a04d49e1350?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Semoir pneumatique 4 rangs" loading="lazy"><span class="product-type">Matériel
+                            agricole</span><button class="favorite" data-favorite="4" type="button" aria-pressed="false"
+                            aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">Très bon état</span>
+                        <h3>Semoir pneumatique 4 rangs</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Poitiers, Vienne</div>
+                        <div class="product-footer">
+                            <div><strong>8 750&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Agri Services 86"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Semences de blé tendre certifiées" loading="lazy"><span
+                            class="product-type">Semences</span><button class="favorite" data-favorite="5" type="button"
+                            aria-pressed="false" aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">Lot 1 tonne · Certifié</span>
+                        <h3>Semences de blé tendre certifiées</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Chartres, Eure-et-Loir</div>
+                        <div class="product-footer">
+                            <div><strong>540&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Coopérative de la Beauce"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Engrais organique — palette 1 tonne" loading="lazy"><span
+                            class="product-type">Intrants</span><button class="favorite" data-favorite="6" type="button"
+                            aria-pressed="false" aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">Conforme agriculture bio</span>
+                        <h3>Engrais organique — palette 1 tonne</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Rennes, Ille-et-Vilaine</div>
+                        <div class="product-footer">
+                            <div><strong>320&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Bretagne Fertilisants"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <div class="product-image"><img
+                            src="https://images.unsplash.com/photo-1696441567908-6a04d49e1350?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                            alt="Lot de pièces pour tracteur Renault" loading="lazy"><span
+                            class="product-type">Pièces</span><button class="favorite" data-favorite="7" type="button"
+                            aria-pressed="false" aria-label="Ajouter aux favoris"><svg aria-hidden="true">
+                                <use href="#icon-heart"></use>
+                            </svg></button></div>
+                    <div class="product-body"><span class="product-meta">Pièces d'origine · Neuf</span>
+                        <h3>Lot de pièces pour tracteur Renault</h3>
+                        <div class="location"><svg aria-hidden="true">
+                                <use href="#icon-location"></use>
+                            </svg> Dijon, Côte-d'Or</div>
+                        <div class="product-footer">
+                            <div><strong>1 250&nbsp;€</strong><small>Prix TTC</small></div><span class="seller-check"
+                                title="Atelier Mécagri"><svg aria-hidden="true">
+                                    <use href="#icon-check"></use>
+                                </svg></span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="center-action"><button class="secondary-button" id="show-all" type="button">Découvrir toutes les
+                    annonces <svg>
+                        <use href="#icon-arrow"></use>
+                    </svg></button></div>
+        </div>
+        <div class="center-action">
+            <a href="index.html" class="back-home">
+                ← Retour à l'accueil
+            </a>
+        </div>
+    </section>
+    <script src="assets/js/app.js" defer></script>
+</body>
+
+</html>
