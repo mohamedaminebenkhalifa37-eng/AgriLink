@@ -1,0 +1,4 @@
+# Apache : empêche l'accès direct aux fichiers sensibles.
+<FilesMatch "^(config\.php|config\.local\.php|config\.local\.example\.php|schema\.sql)$">
+    Require all denied
+</FilesMatch>
