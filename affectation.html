@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta content="fr" http-equiv="Content-Language">
+<link href = "mesStyles.css" rel = "stylesheet" type = "text/css">
+</head>
+<body>
+  <form action = "" method = "" onsubmit = "" >
+	<fieldset>
+	<legend>Affectation</legend>
+	<div class="unJardin">
+        <div class = "parcelles" id = "p1" onclick = "choixParcelle(1)">1</div>
+        <div class = "parcelles" id = "p2" onclick = "choixParcelle(2)">2</div> 
+        <div class = "parcelles" id = "p3" onclick = "choixParcelle(3)">3</div> 
+		<div class = "parcelles" id = "p4" onclick = "choixParcelle(4)">4</div> 
+		<img id ="img1" src="parcelles.jpeg"   alt = "Jardin"><br><br>
+		
+		<table>
+		<tr>
+			<td><label>Identifiant</label></td>
+			<td></td>
+			<td><input name="idMem" type="number" id="idMem"></td>
+			<td></td>
+			<td><label>Mot de passe</label> </td>
+			<td></td>
+			<td><input name="mdp" type="password" id="mdp"></td>
+		</tr>
+		<tr>
+			<td><label>Numéro de la Parcelle</label></td>
+			<td></td>
+			<td><input name="numPar" type="number" id="numPar" readonly></td>
+			<td></td>
+			<td><label>Jardin</label> </td>
+			<td></td>
+			<td>
+				<select name="idJar" id="idJar">
+				         <option >Sélectionner un jardin</option> 
+				         <option value="J1">Résidence des Pins</option> 
+				         <option value="R3">Eden des roses</option>
+			    </select>
+			</td>
+		</tr>
+		</table>
+     	<div class="btn">
+			<input type="reset" value="Annuler" >
+			<input type="submit" value="Enregistrer">
+		</div>
+	</div>
+	</fieldset>
+  </form>
+</body>
+</html>
