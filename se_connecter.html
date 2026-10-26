@@ -181,7 +181,7 @@
       Connectez-vous pour accéder à votre compte.
     </p>
 
-    <div class="message" id="message"></div>
+    <div class="message" id="message" role="status" aria-live="polite"></div>
 
     <form id="loginForm">
 
@@ -191,6 +191,7 @@
           type="email"
           id="email"
           placeholder="exemple@email.com"
+          autocomplete="email"
           required
         >
       </div>
@@ -201,6 +202,7 @@
           type="password"
           id="password"
           placeholder="Votre mot de passe"
+          autocomplete="current-password"
           required
         >
       </div>
@@ -234,21 +236,57 @@
   <script>
     const form = document.getElementById("loginForm");
     const message = document.getElementById("message");
+    const emailInput = document.getElementById("email");
+    const rememberCheckbox = document.getElementById("remember");
+    const rememberedEmailKey = "agriLink.rememberedEmail";
+
+    function saveRememberedEmail() {
+      try {
+        if (rememberCheckbox.checked && emailInput.value.trim()) {
+          localStorage.setItem(rememberedEmailKey, emailInput.value.trim());
+        } else {
+          localStorage.removeItem(rememberedEmailKey);
+        }
+
+        return true;
+      } catch (error) {
+        message.textContent =
+          "Impossible d'enregistrer votre préférence dans le stockage du navigateur.";
+        message.style.display = "block";
+        return false;
+      }
+    }
+
+    try {
+      const rememberedEmail = localStorage.getItem(rememberedEmailKey);
+
+      if (rememberedEmail) {
+        emailInput.value = rememberedEmail;
+        rememberCheckbox.checked = true;
+      }
+    } catch (error) {
+      message.textContent =
+        "Le stockage du navigateur est indisponible ; votre adresse e-mail ne pourra pas être mémorisée.";
+      message.style.display = "block";
+    }
 
     form.addEventListener("submit", function(event) {
       event.preventDefault();
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      message.style.display = "block";
-
-      // Démonstration uniquement : aucune authentification réelle.
-      if (email && password) {
+      if (saveRememberedEmail()) {
         message.textContent =
-          "Formulaire valide ! Connectez maintenant votre backend.";
+          "Formulaire valide. L'authentification nécessite un backend ; aucun compte n'est vérifié pour le moment.";
+        message.style.display = "block";
       }
     });
+
+    emailInput.addEventListener("input", function() {
+      if (rememberCheckbox.checked) {
+        saveRememberedEmail();
+      }
+    });
+
+    rememberCheckbox.addEventListener("change", saveRememberedEmail);
 
     document.getElementById("forgotPassword")
       .addEventListener("click", function(event) {
