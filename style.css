@@ -420,3 +420,11 @@ h1, h2, h3, p { margin-top: 0; }
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
   .motion-ready [data-reveal] { opacity: 1; transform: none; }
 }
+    .main-nav .nav-link { position:relative; transition:color .2s ease; }
+    .main-nav .nav-link::after { content:""; position:absolute; left:0; right:0; bottom:-9px; height:2px; background:#4f7d45; transform:scaleX(0); transform-origin:left; transition:transform .2s ease; }
+    .main-nav .nav-link:hover, .main-nav .nav-link.active { color:#4f7d45; }
+    .main-nav .nav-link.active::after { transform:scaleX(1); }
+    @media (max-width: 760px) {
+      .main-nav .nav-link::after { bottom:-3px; }
+      .product-photo { min-height:210px; }
+    }
