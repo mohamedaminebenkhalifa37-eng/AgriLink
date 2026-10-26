@@ -38,6 +38,16 @@
       <a class="nav-link" href="#journal">Journal</a>
       <a class="nav-link" href="se_connecter.html">Se connecter</a>
     </nav>
+    <style>
+    .main-nav .nav-link { position:relative; transition:color .2s ease; }
+    .main-nav .nav-link::after { content:""; position:absolute; left:0; right:0; bottom:-9px; height:2px; background:#4f7d45; transform:scaleX(0); transform-origin:left; transition:transform .2s ease; }
+    .main-nav .nav-link:hover, .main-nav .nav-link.active { color:#4f7d45; }
+    .main-nav .nav-link.active::after { transform:scaleX(1); }
+    @media (max-width: 760px) {
+      .main-nav .nav-link::after { bottom:-3px; }
+      .product-photo { min-height:210px; }
+    }
+    </style>
 
     <div class="header-actions">
       <button class="icon-button search-toggle" type="button" aria-label="Search products">
