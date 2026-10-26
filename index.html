@@ -11,6 +11,27 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="agri.js" defer></script>
+  <style>
+    .main-nav .nav-link { position: relative; }
+    .main-nav .nav-link::after {
+      position: absolute;
+      right: 0;
+      bottom: -9px;
+      left: 0;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: #4f7d45;
+      content: "";
+      transition: transform .2s ease;
+    }
+    .main-nav .nav-link:hover,
+    .main-nav .nav-link.active { color: #4f7d45; }
+    .main-nav .nav-link.active::after { transform: scaleX(1); }
+    @media (max-width: 760px) {
+      .main-nav .nav-link::after { bottom: -3px; }
+    }
+  </style>
 </head>
 <body>
   <div class="announcement">
@@ -30,7 +51,7 @@
     </button>
 
     <nav class="main-nav" aria-label="Main navigation">
-      <a class="nav-link active" href="#home">Home</a>
+      <a class="nav-link active" href="#home" aria-current="page">Home</a>
       <a class="nav-link" href="#shop">Shop</a>
       <a class="nav-link" href="#seeds">Seeds</a>
       <a class="nav-link" href="#tools">Farm tools</a>
@@ -237,5 +258,26 @@
     <ul class="cart-items"></ul>
     <div class="cart-summary" hidden><div><span>Subtotal</span><strong class="cart-subtotal">$0.00</strong></div><p>Delivery calculated at checkout.</p><button class="button button-dark checkout-button" type="button">Continue to checkout <span aria-hidden="true">→</span></button></div>
   </aside>
+  <script>
+    (() => {
+      const mainNavigation = document.querySelector(".main-nav");
+
+      mainNavigation.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        const selectedLink = event.target.closest(".nav-link");
+        if (!selectedLink) return;
+
+        mainNavigation.querySelectorAll(".nav-link").forEach((link) => {
+          const isSelected = link === selectedLink;
+          link.classList.toggle("active", isSelected);
+          if (isSelected) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
