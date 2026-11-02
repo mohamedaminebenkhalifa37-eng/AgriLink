@@ -1,283 +1,73 @@
-/* AgriPlace — interface (HTML/CSS/JS pur). L'API PHP est dans backend/api.php. */
-(function () {
-  "use strict";
-
-  var API_URL = "backend/api.php";
-  var ALL = "Toutes les catégories";
-  var DEFAULT_IMAGE = "https://images.unsplash.com/photo-1614977645540-7abd88ba8e56?auto=format&fit=crop&w=900&q=85";
-
-  /* Données de démonstration, utilisées si PHP/MySQL n'est pas démarré. */
-  var fallbackProducts = [
-    { id: 1, title: "Tracteur John Deere 5075E", price: 32500, category: "Matériel agricole", location: "Orléans, Loiret", details: "2019 · 1 250 h", image_url: "https://images.unsplash.com/photo-1614977645540-7abd88ba8e56?auto=format&fit=crop&w=900&q=85", seller: "Ferme des Vallons" },
-    { id: 2, title: "Tracteur Massey Ferguson 5711", price: 44900, category: "Véhicules", location: "Auch, Gers", details: "2021 · 890 h", image_url: "https://images.unsplash.com/photo-1606739211185-2c846d734a6d?auto=format&fit=crop&w=900&q=85", seller: "EARL du Soleil" },
-    { id: 3, title: "Pommes de terre — lot 2 tonnes", price: 680, category: "Récoltes & produits", location: "Arras, Pas-de-Calais", details: "Récolte 2025 · Bio", image_url: "https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&fit=crop&w=900&q=85", seller: "Maraîchers du Nord" },
-    { id: 4, title: "Semoir pneumatique 4 rangs", price: 8750, category: "Matériel agricole", location: "Poitiers, Vienne", details: "Très bon état", image_url: "https://images.unsplash.com/photo-1696441567908-6a04d49e1350?auto=format&fit=crop&w=900&q=85", seller: "Agri Services 86" },
-    { id: 5, title: "Semences de blé tendre certifiées", price: 540, category: "Semences", location: "Chartres, Eure-et-Loir", details: "Lot 1 tonne · Certifié", image_url: "https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&fit=crop&w=900&q=85", seller: "Coopérative de la Beauce" },
-    { id: 6, title: "Engrais organique — palette 1 tonne", price: 320, category: "Intrants", location: "Rennes, Ille-et-Vilaine", details: "Conforme agriculture bio", image_url: "https://images.unsplash.com/photo-1591586116988-62fe65164f8d?auto=format&fit=crop&w=900&q=85", seller: "Bretagne Fertilisants" },
-    { id: 7, title: "Lot de pièces pour tracteur Renault", price: 1250, category: "Pièces", location: "Dijon, Côte-d'Or", details: "Pièces d'origine · Neuf", image_url: "https://images.unsplash.com/photo-1696441567908-6a04d49e1350?auto=format&fit=crop&w=900&q=85", seller: "Atelier Mécagri" }
-  ];
-
-  var favorites = [];
-  try { favorites = JSON.parse(localStorage.getItem("agriplace-favorites") || "[]"); } catch (e) { favorites = []; }
-
-  var state = {
-    products: fallbackProducts.slice(),
-    favorites: new Set(Array.isArray(favorites) ? favorites.map(Number) : []),
-    query: "",
-    category: ALL
-  };
-
-  function $(selector) { return document.querySelector(selector); }
-
-  var el = {
-    grid: $("#product-grid"),
-    empty: $("#empty-state"),
-    count: $("#listing-count"),
-    pill: $("#filter-pill"),
-    input: $("#search-input"),
-    select: $("#category-select"),
-    modal: $("#sell-modal"),
-    formView: $("#form-view"),
-    successView: $("#success-view"),
-    successText: $("#success-text"),
-    form: $("#listing-form"),
-    formMessage: $("#form-message"),
-    toast: $("#toast"),
-    menuButton: $("#menu-button"),
-    mainNav: $("#main-nav")
-  };
-
-  /* ---------- Utilitaires ---------- */
-  function escapeHtml(value) {
-    return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-  }
-
-  function formatPrice(price) {
-    return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(Number(price) || 0);
-  }
-
-  function icon(name) {
-    return '<svg aria-hidden="true"><use href="#icon-' + name + '"></use></svg>';
-  }
-
-  var toastTimer;
-  function showToast(message) {
-    el.toast.textContent = message;
-    el.toast.hidden = false;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.toast.hidden = true; }, 3200);
-  }
-
-  /* ---------- Affichage des annonces ---------- */
-  function filteredProducts() {
-    var term = state.query.trim().toLocaleLowerCase("fr");
-    return state.products.filter(function (product) {
-      var content = (product.title + " " + product.location + " " + product.category + " " + (product.description || "")).toLocaleLowerCase("fr");
-      var matchesText = !term || content.indexOf(term) !== -1;
-      var matchesCategory = state.category === ALL || product.category === state.category;
-      return matchesText && matchesCategory;
-    });
-  }
-
-  function productCard(product) {
-    var id = Number(product.id);
-    var active = state.favorites.has(id);
-    return '<article class="product-card">' +
-      '<div class="product-image">' +
-        '<img src="' + escapeHtml(product.image_url || DEFAULT_IMAGE) + '" alt="' + escapeHtml(product.title) + '" loading="lazy" />' +
-        '<span class="product-type">' + escapeHtml(product.category) + '</span>' +
-        '<button class="favorite' + (active ? " active" : "") + '" data-favorite="' + id + '" type="button" aria-pressed="' + active + '" aria-label="Ajouter aux favoris">' + icon("heart") + '</button>' +
-      '</div>' +
-      '<div class="product-body">' +
-        '<span class="product-meta">' + escapeHtml(product.details || "Nouvelle annonce") + '</span>' +
-        '<h3>' + escapeHtml(product.title) + '</h3>' +
-        '<div class="location">' + icon("location") + " " + escapeHtml(product.location) + '</div>' +
-        '<div class="product-footer">' +
-          '<div><strong>' + formatPrice(product.price) + '</strong><small>Prix TTC</small></div>' +
-          '<span class="seller-check" title="' + escapeHtml(product.seller || "Vendeur vérifié") + '">' + icon("check") + '</span>' +
-        '</div>' +
-      '</div>' +
-    '</article>';
-  }
-
-  function renderProducts() {
-    var products = filteredProducts();
-    el.grid.innerHTML = products.map(productCard).join("");
-    el.empty.hidden = products.length !== 0;
-    el.grid.hidden = products.length === 0;
-    el.count.textContent = products.length + " annonce" + (products.length > 1 ? "s" : "");
-    var label = state.query.trim() || (state.category !== ALL ? state.category : "");
-    el.pill.hidden = !label;
-    el.pill.innerHTML = label ? escapeHtml(label) + " " + icon("x") : "";
-  }
-
-  function scrollToListings() {
-    $("#annonces").scrollIntoView({ behavior: "smooth" });
-  }
-
-  function resetSearch() {
-    state.query = "";
-    state.category = ALL;
-    el.input.value = "";
-    el.select.value = ALL;
-    renderProducts();
-  }
-
-  /* ---------- Chargement depuis l'API PHP ---------- */
-  function loadProducts() {
-    return fetch(API_URL + "?action=listings", { headers: { Accept: "application/json" } })
-      .then(function (response) {
-        if (!response.ok) throw new Error("API indisponible");
-        return response.json();
-      })
-      .then(function (payload) {
-        if (payload && Array.isArray(payload.data) && payload.data.length) state.products = payload.data;
-      })
-      .catch(function () { /* Mode démo : le site reste utilisable sans PHP/MySQL. */ })
-      .then(renderProducts);
-  }
-
-  /* ---------- Modale « Déposer une annonce » ---------- */
-  function openModal() {
-    el.form.reset();
-    el.formMessage.textContent = "";
-    el.formView.hidden = false;
-    el.successView.hidden = true;
-    el.modal.hidden = false;
-    document.body.style.overflow = "hidden";
-    setTimeout(function () { el.form.elements.title.focus(); }, 0);
-  }
-
-  function closeModal() {
-    el.modal.hidden = true;
-    document.body.style.overflow = "";
-  }
-
-  function submitListing(event) {
-    event.preventDefault();
-    var submitButton = el.form.querySelector("[type='submit']");
-    var data = new FormData(el.form);
-    var listing = {
-      title: String(data.get("title") || "").trim(),
-      category: data.get("category"),
-      price: Number(data.get("price")),
-      location: String(data.get("location") || "").trim(),
-      description: String(data.get("description") || "").trim()
-    };
-
-    submitButton.disabled = true;
-    submitButton.textContent = "Publication...";
-    el.formMessage.textContent = "";
-
-    function restoreButton() {
-      submitButton.disabled = false;
-      submitButton.innerHTML = "Publier l’annonce " + icon("arrow");
-    }
-
-    function showSuccess(text) {
-      el.successText.textContent = text;
-      el.formView.hidden = true;
-      el.successView.hidden = false;
-      renderProducts();
-    }
-
-    fetch(API_URL + "?action=listings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(listing)
-    })
-      .then(function (response) {
-        return response.json().catch(function () { return null; }).then(function (payload) {
-          return { status: response.status, ok: response.ok, payload: payload };
-        });
-      })
-      .then(function (result) {
-        if (result.ok && result.payload && result.payload.data) {
-          state.products.unshift(result.payload.data);
-          restoreButton();
-          showSuccess("Votre annonce a bien été publiée. Vous pouvez la retrouver dans la liste.");
-          return;
-        }
-        if (result.status === 400 || result.status === 422) {
-          /* Refus de validation par le serveur : on affiche le message, on ne simule pas un succès. */
-          restoreButton();
-          el.formMessage.textContent = (result.payload && result.payload.message) || "Annonce invalide.";
-          return;
-        }
-        throw new Error("Serveur indisponible");
-      })
-      .catch(function () {
-        /* Mode démo (PHP/MySQL non démarré) : l'annonce est ajoutée localement, sans être enregistrée. */
-        state.products.unshift({
-          id: Date.now(),
-          title: listing.title,
-          category: listing.category,
-          price: listing.price,
-          location: listing.location,
-          description: listing.description,
-          details: "Nouvelle annonce",
-          seller: "Votre exploitation",
-          image_url: DEFAULT_IMAGE
-        });
-        restoreButton();
-        showSuccess("Annonce ajoutée en mode démo : le serveur PHP/MySQL est indisponible, elle disparaîtra au rechargement.");
-      });
-  }
-
-  /* ---------- Événements ---------- */
-  $("#search-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-    state.query = el.input.value;
-    state.category = el.select.value;
-    renderProducts();
-    scrollToListings();
-  });
-
-  document.querySelectorAll(".category-card").forEach(function (button) {
-    button.addEventListener("click", function () {
-      state.query = "";
-      el.input.value = "";
-      state.category = button.dataset.category || ALL;
-      el.select.value = state.category;
-      renderProducts();
-      scrollToListings();
-    });
-  });
-
-  el.grid.addEventListener("click", function (event) {
-    var button = event.target.closest("[data-favorite]");
-    if (!button) return;
-    var id = Number(button.dataset.favorite);
-    var nowActive = !state.favorites.has(id);
-    if (nowActive) state.favorites.add(id); else state.favorites.delete(id);
-    try { localStorage.setItem("agriplace-favorites", JSON.stringify(Array.from(state.favorites))); } catch (e) { /* stockage indisponible */ }
-    button.classList.toggle("active", nowActive);
-    button.setAttribute("aria-pressed", String(nowActive));
-  });
-
-  el.pill.addEventListener("click", resetSearch);
-  $("#reset-search").addEventListener("click", resetSearch);
-  $("#show-all").addEventListener("click", function () { resetSearch(); scrollToListings(); });
-  $("#login-button").addEventListener("click", function () { showToast("La connexion arrive bientôt sur AgriPlace."); });
-
-  document.querySelectorAll(".open-sell").forEach(function (button) { button.addEventListener("click", openModal); });
-  $("#modal-close").addEventListener("click", closeModal);
-  $("#finish-button").addEventListener("click", closeModal);
-  el.modal.addEventListener("mousedown", function (event) { if (event.target === el.modal) closeModal(); });
-  document.addEventListener("keydown", function (event) { if (event.key === "Escape" && !el.modal.hidden) closeModal(); });
-  el.form.addEventListener("submit", submitListing);
-
-  function setMenu(open) {
-    el.mainNav.classList.toggle("is-open", open);
-    el.menuButton.setAttribute("aria-expanded", String(open));
-    el.menuButton.innerHTML = icon(open ? "x" : "menu");
-  }
-  el.menuButton.addEventListener("click", function () { setMenu(!el.mainNav.classList.contains("is-open")); });
-  el.mainNav.addEventListener("click", function () { setMenu(false); });
-
-  /* ---------- Démarrage ---------- */
-  renderProducts();
-  loadProducts();
+(function(){
+var $=function(s,c){return (c||document).querySelector(s)},$$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+var L=localStorage.getItem('agLang')||'fr';
+/* ---------- données (prix en dinars tunisiens, exemples) ---------- */
+var D=[
+{id:'l1',t:'location',c:'location',img:'tracteur-coucher.jpg',p:180,u:'day',fr:['Tracteur 90 CV avec chauffeur','Tracteur polyvalent pour labour, transport et travaux de saison.'],ar:['جرّار 90 حصان مع سائق','جرّار متعدّد الاستعمالات للحرث والنقل وخدمات الموسم.']},
+{id:'l2',t:'location',c:'location',img:'semoir.jpg',p:90,u:'day',fr:['Semoir de précision 4 rangs','Semis régulier et économe en semences.'],ar:['آلة بذر دقيقة 4 خطوط','بذر منتظم وتوفير في البذور.']},
+{id:'l3',t:'location',c:'location',img:'pulverisation.jpg',p:70,u:'day',fr:['Pulvérisateur tracté 600 L','Traitement rapide de grandes parcelles.'],ar:['رشّاشة مجرورة 600 لتر','معالجة سريعة للقطع الكبيرة.']},
+{id:'l4',t:'location',c:'location',img:'irrigation.jpg',p:35,u:'day',fr:['Kit d’irrigation goutte-à-goutte (1 ha)','Tuyaux, raccords et arroseurs prêts à poser.'],ar:['طقم ريّ قطرة قطرة (هكتار)','أنابيب، وصلات ورشّاشات جاهزة للتركيب.']},
+{id:'l5',t:'location',c:'location',img:'outils.jpg',p:12,u:'day',fr:['Lot d’outillage de jardin','Bêches, transplantoirs et petit outillage.'],ar:['طقم أدوات جاردينة','مجارف، أدوات تشتيل وأدوات صغيرة.']},
+{id:'s1',t:'service',c:'service',img:'tracteur.jpg',p:60,u:'from',fr:['Réparation de tracteur','Diagnostic et réparation sur place par un mécanicien.'],ar:['تصليح الجرّار','تشخيص وتصليح في عين المكان مع ميكانيكي.']},
+{id:'s2',t:'service',c:'service',img:'tracteur-coucher.jpg',p:120,u:'trip',fr:['Transport de récolte','Transport de la récolte vers le marché ou le stockage.'],ar:['نقل الصابة','نقل الصابة للسوق ولا للتخزين.']},
+{id:'s3',t:'service',c:'service',img:'pulverisation.jpg',p:45,u:'ha',fr:['Traitement phytosanitaire','Pulvérisation par un applicateur qualifié.'],ar:['معالجة النباتات','رشّ من طرف مختصّ.']},
+{id:'s4',t:'service',c:'service',img:'sol.jpg',p:80,u:'pc',fr:['Analyse du sol','Résultats et conseils de fertilisation adaptés à votre parcelle.'],ar:['تحليل التربة','نتائج ونصايح تسميد على قدّ أرضك.']},
+{id:'s5',t:'service',c:'service',img:'irrigation.jpg',p:300,u:'from',fr:['Installation d’irrigation','Étude et pose d’un réseau goutte-à-goutte ou aspersion.'],ar:['تركيب منظومة ريّ','دراسة وتركيب شبكة قطرة قطرة ولا رشّ.']},
+{id:'s6',t:'service',c:'service',img:'outils.jpg',p:20,u:'from',fr:['Entretien d’outils & petit matériel','Affûtage, nettoyage et remise en état.'],ar:['صيانة الأدوات والمعدّات الصغيرة','سنّ، تنظيف وإعادة تأهيل.']},
+{id:'m1',t:'market',c:'chimie',img:'engrais.jpg',p:62,u:'pc',fr:['Herbicide sélectif 5 L','Contre les mauvaises herbes des cultures céréalières.'],ar:['مبيد أعشاب انتقائي 5 لتر','ضدّ الأعشاب الضارّة في الحبوب.']},
+{id:'m2',t:'market',c:'chimie',img:'nutriments.jpg',p:48,u:'pc',fr:['Fongicide à base de cuivre 1 kg','Protection contre le mildiou et les maladies fongiques.'],ar:['مبيد فطريات بالنحاس 1 كغ','حماية من المرض الفطري.']},
+{id:'m3',t:'market',c:'chimie',img:'engrais.jpg',p:36,u:'pc',fr:['Insecticide 1 L','Traitement contre les insectes ravageurs.'],ar:['مبيد حشرات 1 لتر','معالجة ضدّ الحشرات الضارّة.']},
+{id:'m4',t:'market',c:'engrais',img:'nutriments.jpg',p:85,u:'pc',fr:['Engrais NPK 20-20-20 (25 kg)','Engrais équilibré pour toutes cultures.'],ar:['سماد NPK 20-20-20 (25 كغ)','سماد متوازن لكل الزراعات.']},
+{id:'m5',t:'market',c:'engrais',img:'sol.jpg',p:28,u:'pc',fr:['Compost organique 50 kg','Améliore la structure et la vie du sol.'],ar:['سماد عضوي 50 كغ','يحسّن بنية التربة وحياتها.']},
+{id:'m6',t:'market',c:'semences',img:'sachets.jpg',p:38,u:'pc',fr:['Collection de 12 sachets de semences potagères','Tomate, concombre, carotte, laitue et plus.'],ar:['12 كيس بذور خضر','طماطم، قرعة، جزر، خسّ وأكثر.']},
+{id:'m7',t:'market',c:'semences',img:'graines-main.jpg',p:52,u:'pc',fr:['Semences de blé (sac 25 kg)','Semences sélectionnées pour de bons rendements.'],ar:['بذور قمح (كيس 25 كغ)','بذور مختارة لمردود أحسن.']},
+{id:'m8',t:'market',c:'outils',img:'outils.jpg',p:45,u:'pc',fr:['Lot d’outils de jardinage','Pelle, binette, transplantoir et plus.'],ar:['طقم أدوات جاردينة','مجرفة، معزقة، أدوات تشتيل وأكثر.']},
+{id:'m9',t:'market',c:'outils',img:'engrais.jpg',p:17,u:'pc',fr:['Pulvérisateur manuel 5 L + gants','Pour traitements localisés en toute sécurité.'],ar:['رشّاشة يدوية 5 لتر + قفازات','لمعالجات صغيرة بأمان.']}];
+var CAT={location:['Location','كراء'],service:['Service','خدمة'],chimie:['Chimique','كيميائي'],engrais:['Engrais','سماد'],semences:['Semences','بذور'],outils:['Outils','أدوات']};
+var UN={day:['/ jour','/ نهار'],ha:['/ ha','/ هكتار'],trip:['/ trajet','/ سفرة'],from:['',''],pc:['','']};
+var GOV=['Ariana','Béja','Ben Arous','Bizerte','Gabès','Gafsa','Jendouba','Kairouan','Kasserine','Kébili','Le Kef','Mahdia','La Manouba','Médenine','Monastir','Nabeul','Sfax','Sidi Bouzid','Siliana','Sousse','Tataouine','Tozeur','Tunis','Zaghouan'];
+var GOVAR=['أريانة','باجة','بن عروس','بنزرت','قابس','قفصة','جندوبة','القيروان','القصرين','قبلي','الكاف','المهدية','منوبة','مدنين','المنستير','نابل','صفاقس','سيدي بوزيد','سليانة','سوسة','تطاوين','توزر','تونس','زغوان'];
+var isAr=function(){return L==='ar'};
+function money(it){var dt=isAr()?'د.ت':'DT',pre=it.u==='from'?(isAr()?'من ':'dès '):'';var u=UN[it.u][isAr()?1:0];return '<b>'+pre+it.p+' '+dt+'</b>'+(u?' <small>'+u+'</small>':'')}
+function card(it,i){var tr=isAr()?it.ar:it.fr,cat=CAT[it.c][isAr()?1:0];
+ var act=it.t==='location'?(isAr()?'احجز':'Réserver'):it.t==='service'?(isAr()?'اطلب':'Demander'):(isAr()?'اطلب':'Commander');
+ return '<article class="card rv" style="transition-delay:'+(i%6*60)+'ms"><div class="imw"><div class="im" style="background-image:url(images/'+it.img+')"></div><span class="tg">'+cat+'</span></div><div class="bd"><h3>'+tr[0]+'</h3><p>'+tr[1]+'</p><div class="pr"><span>'+money(it)+'</span><button class="btn" data-req="'+it.fr[0]+'|'+it.ar[0]+'">'+act+'</button></div></div></article>'}
+var cat='all',q='';
+function render(){$$('[data-list]').forEach(function(box){var k=box.dataset.list,arr;
+ if(k==='home')arr=[D[0],D[3],D[8],D[13],D[15],D[11]];else if(k==='market')arr=D.filter(function(x){return x.t==='market'&&(cat==='all'||x.c===cat)&&(!q||((x.fr[0]+x.ar[0]+x.fr[1]).toLowerCase().indexOf(q)>-1))});else arr=D.filter(function(x){return x.t===k});
+ box.innerHTML=arr.map(card).join('');
+ var em=$('#empty');if(em&&k==='market')em.style.display=arr.length?'none':'block'});
+ var w=$('#warn');if(w)w.style.display=(cat==='all'||cat==='chimie'||cat==='engrais')?'flex':'none';
+ reveal();bindReq()}
+/* ---------- langue ---------- */
+function applyLang(){var ar=L==='ar';document.documentElement.lang=ar?'ar':'fr';document.documentElement.dir=ar?'rtl':'ltr';
+ $$('[data-i]').forEach(function(e){if(e.dataset.fr===undefined)e.dataset.fr=e.innerHTML;var k=e.dataset.i;e.innerHTML=(ar&&window.AR&&AR[k]!==undefined)?AR[k]:e.dataset.fr});
+ $$('[data-ip]').forEach(function(e){if(e.dataset.fr===undefined)e.dataset.fr=e.placeholder;e.placeholder=(ar&&AR[e.dataset.ip])?AR[e.dataset.ip]:e.dataset.fr});
+ var b=$('#lang');if(b)b.textContent=ar?'FR':'عربي';
+ var g=$('#rq_g');if(g){var v=g.value;g.innerHTML='<option value="">'+(ar?'اختار…':'Choisir…')+'</option>'+GOV.map(function(x,i){return '<option value="'+x+'">'+(ar?GOVAR[i]:x)+'</option>'}).join('');g.value=v}
+ if($('[data-list]'))render()}
+/* ---------- apparition au scroll ---------- */
+var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12}):null;
+function reveal(){$$('.rv:not(.in)').forEach(function(e){io?io.observe(e):e.classList.add('in')})}
+/* ---------- demandes (modal) ---------- */
+var md=$('#md');
+function bindReq(){$$('[data-req]').forEach(function(b){if(b._b)return;b._b=1;b.addEventListener('click',function(){var n=b.dataset.req.split('|');$('#mdS').textContent=isAr()?n[1]:n[0];$('#rqNote').style.display='none';md.dataset.item=n[0];md.classList.add('open');var d=$('#rq_d');d.min=new Date().toISOString().slice(0,10);setTimeout(function(){$('#rq_n').focus()},50)})})}
+if(md){$('#mdX').onclick=function(){md.classList.remove('open')};md.addEventListener('click',function(e){if(e.target===md)md.classList.remove('open')});document.addEventListener('keydown',function(e){if(e.key==='Escape')md.classList.remove('open')});
+ $('#rqForm').addEventListener('submit',function(e){e.preventDefault();var d={item:md.dataset.item,nom:$('#rq_n').value,tel:$('#rq_t').value,gov:$('#rq_g').value,date:$('#rq_d').value,msg:$('#rq_m').value};
+  try{var l=JSON.parse(localStorage.getItem('agrilinkDemandes')||'[]');l.push(d);localStorage.setItem('agrilinkDemandes',JSON.stringify(l))}catch(x){}
+  $('#rqNote').style.display='block';this.reset()})}
+/* ---------- init ---------- */
+document.addEventListener('DOMContentLoaded',function(){
+ var yr=$('#yr');if(yr)yr.textContent=new Date().getFullYear();
+ var lb=$('#lang');if(lb)lb.onclick=function(){L=isAr()?'fr':'ar';localStorage.setItem('agLang',L);applyLang()};
+ var bg=$('#burger');if(bg)bg.onclick=function(){$('#nav').classList.toggle('open')};
+ var u=new URLSearchParams(location.search);if(u.get('cat'))cat=u.get('cat');if(u.get('q')){q=u.get('q').toLowerCase()}
+ $$('.chip').forEach(function(c){c.classList.toggle('on',c.dataset.c===cat);c.onclick=function(){cat=c.dataset.c;$$('.chip').forEach(function(x){x.classList.toggle('on',x===c)});render()}});
+ var hs=$('#heroSearch');if(hs)hs.addEventListener('submit',function(e){e.preventDefault();var v=$('#heroQ').value.trim();location.href='marketplace.html'+(v?'?q='+encodeURIComponent(v):'')});
+ var cf=$('#ctForm');if(cf)cf.addEventListener('submit',function(e){e.preventDefault();$('#ctNote').style.display='block';cf.reset()});
+ var tb=$$('.tabs button');tb.forEach(function(b){b.onclick=function(){tb.forEach(function(x){x.classList.toggle('on',x===b)});$('#fIn').style.display=b.dataset.t==='in'?'grid':'none';$('#fUp').style.display=b.dataset.t==='up'?'grid':'none'}});
+ if(location.hash==='#inscription'&&tb[1])tb[1].click();
+ $$('#fIn,#fUp').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var n=$('.note',f);if(f.id==='fUp'&&$('#p1').value!==$('#p2').value){alert(isAr()?'كلمتين السر مش كيف كيف.':'Les mots de passe ne correspondent pas.');return}n.style.display='block'})});
+ applyLang();reveal();bindReq();
+});
 })();
